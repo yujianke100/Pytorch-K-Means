@@ -2,21 +2,13 @@
 ### Homework : Using K-Means to handel pictures with GUI
 
 ## 环境
-torch
-
-numpy
-
-cv2
-
-matplotlib
-
-PySimpleGUI
-
-easygui
-
+torch，numpy，cv2，matplotlib，PySimpleGUI，easygui
 
 ## 使用
 python main.py即可
+
+## 目标
+利用 K means，让图片中颜色相近的点变成相同的颜色，而最终的颜色就由这些点求均值得到
 
 ## 基本思想
 1.读取图片，不论RGB，像素点本身二维压成一维
@@ -28,7 +20,6 @@ python main.py即可
 4.重复二三步，直到每个点的标签不再变动
 
 5.对每一类的点的RGB取平均，得到结果
-
 
 ## 难点
 主要难点在于如何取出同类的点并分别做取平均操作
