@@ -1,6 +1,23 @@
 # Pytorch-K-Means
 ### Homework : Using K-Means to handel pictures with GUI
 
+##环境
+torch
+
+numpy
+
+cv2
+
+matplotlib
+
+PySimpleGUI
+
+easygui
+
+
+## 使用
+python main.py即可
+
 ## 基本思想
 1.读取图片，不论RGB，像素点本身二维压成一维
 
