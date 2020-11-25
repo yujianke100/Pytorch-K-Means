@@ -42,10 +42,10 @@ def k_means(data, k, max_time=100):
                     [k_points, k_point.mean(0).unsqueeze(0)], 0)
     cmp_labels = label.expand(3, label.shape[0]).transpose(0, 1)
     result_list = []
-    cal_data = torch.where(data == 0., data.type(torch.DoubleTensor), 1e-9)
+    cal_data = torch.where(data == 0., 1e-9, data.type(torch.DoubleTensor))
     for i in range(k):
         tmp_data = torch.where(
-            cmp_labels == i, data.type(torch.DoubleTensor), 0.)
+            cmp_labels == i, cal_data, 0.)
         ave_r = tmp_data[:, 0].sum() / len(torch.nonzero(tmp_data[:, 0]))
         ave_g = tmp_data[:, 1].sum() / len(torch.nonzero(tmp_data[:, 1]))
         ave_b = tmp_data[:, 2].sum() / len(torch.nonzero(tmp_data[:, 2]))
@@ -75,15 +75,15 @@ def get_k_means(img, k):
     result_img_cv = result.numpy().astype(np.uint8)
     cv2.imwrite('result.png', result_img_cv)
     used_time = time.time() - start
-    
+
     plt.figure('result')
-    plt.subplot(1,2,1)
+    plt.subplot(1, 2, 1)
     plt.imshow(img_cv)
     plt.title('original')
     plt.xticks([])
     plt.yticks([])
 
-    plt.subplot(1,2,2)
+    plt.subplot(1, 2, 2)
     plt.imshow(result_img_cv)
     plt.title('result with k = {} in time {:.3f}s'.format(k, used_time))
     plt.xticks([])
@@ -91,9 +91,8 @@ def get_k_means(img, k):
     plt.ion()
     # plt.show()
     plt.savefig('result_cmp.png')
-    img=cv2.imread('result_cmp.png')
+    img = cv2.imread('result_cmp.png')
     cv2.imshow("result", img)
-    cv2.waitKey(0)    
-    cv2.destroyAllWindows() 
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
     return
-    

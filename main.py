@@ -6,7 +6,8 @@ from KMeans import *
 def uiShow():
     supports = ['.jpg', '.jpeg', '.png', '.jfif']
     while (1):
-        choise = t.ccbox(msg='K_means_demo', title='K_means_demo', choices=('选择图片', '退出'))
+        choise = t.ccbox(msg='K_means_demo',
+                         title='K_means_demo', choices=('选择图片', '退出'))
         if(choise == False):
             break
         img_path = t.fileopenbox()
@@ -18,7 +19,18 @@ def uiShow():
             continue
         k = t.integerbox(msg='请输入K的大小(2-10)', title='输入K', default='2',
                          lowerbound=2, upperbound=10, image=None, root=None,)
+        if(k == None):
+            continue
+        while(k > 10 or k < 2):
+            t.msgbox('请选择图片！', 'error!', '重试')
+            k = t.integerbox(msg='请输入K的大小(2-10)', title='输入K', default='2',
+                             lowerbound=2, upperbound=10, image=None, root=None,)
+            if(k == None):
+                continue
+        if(k == None):
+            continue
         get_k_means(img_path, k)
+
 
 if __name__ == '__main__':
     uiShow()
