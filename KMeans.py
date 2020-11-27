@@ -52,10 +52,12 @@ def k_means(data, k, max_time=100):
     window.close()
     return result
 
+
 def show(result, img_cv, k, used_time):
     result_img_cv = result.numpy().astype(np.uint8)
-    cv2.imwrite('./result/result_with_k{}.png'.format(k), cv2.cvtColor(result_img_cv, cv2.COLOR_RGB2BGR))
-    
+    cv2.imwrite('./result/result_with_k{}.png'.format(k),
+                cv2.cvtColor(result_img_cv, cv2.COLOR_RGB2BGR))
+
     plt.figure('result')
     plt.subplot(1, 2, 1)
     plt.imshow(img_cv)
@@ -73,6 +75,7 @@ def show(result, img_cv, k, used_time):
     cv2.imshow("result", img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
 
 def get_k_means(img, k):
     start = time.time()
