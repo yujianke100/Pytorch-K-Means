@@ -2,6 +2,9 @@
 import easygui as t
 from KMeans import *
 
+MAX_K = 20
+MIN_K = 2
+
 
 def uiShow():
     supports = ['.jpg', '.jpeg', '.png', '.jfif']
@@ -17,14 +20,14 @@ def uiShow():
         elif(img_path[-4:] not in supports and img_path[-5:] not in supports):
             t.msgbox('只支持jpg,jpeg,png,jfif文件！', 'error!', '重试')
             continue
-        k = t.integerbox(msg='请输入K的大小(2-10)', title='输入K', default='2',
-                         lowerbound=2, upperbound=10, image=None, root=None,)
+        k = t.integerbox(msg='请输入K的大小({}-{})'.format(MIN_K, MAX_K), title='输入K', default='2',
+                         lowerbound=MIN_K, upperbound=MAX_K, image=None, root=None,)
         if(k == None):
             continue
-        while(k > 10 or k < 2):
+        while(k > MAX_K or k < MIN_K):
             t.msgbox('请选择图片！', 'error!', '重试')
-            k = t.integerbox(msg='请输入K的大小(2-10)', title='输入K', default='2',
-                             lowerbound=2, upperbound=10, image=None, root=None,)
+            k = t.integerbox(msg='请输入K的大小({}-{})'.format(MIN_K, MAX_K), title='输入K', default='2',
+                             lowerbound=MIN_K, upperbound=MAX_K, image=None, root=None,)
             if(k == None):
                 continue
         if(k == None):

@@ -42,16 +42,9 @@ def k_means(data, k, max_time=100):
                     [k_points, k_point.mean(0).unsqueeze(0)], 0)
     cmp_labels = label.expand(3, label.shape[0]).transpose(0, 1)
     result_list = []
-    cal_data = torch.where(data == 0., 1e-9, data.type(torch.DoubleTensor))
     for i in range(k):
-        tmp_data = torch.where(
-            cmp_labels == i, cal_data, 0.)
-        ave_r = tmp_data[:, 0].sum() / len(torch.nonzero(tmp_data[:, 0]))
-        ave_g = tmp_data[:, 1].sum() / len(torch.nonzero(tmp_data[:, 1]))
-        ave_b = tmp_data[:, 2].sum() / len(torch.nonzero(tmp_data[:, 2]))
-        ave = torch.cat(
-            (ave_r.unsqueeze(0), ave_g.unsqueeze(0), ave_b.unsqueeze(0)))
-        tmp_data = torch.where(cmp_labels == i, ave, 0.)
+        avg = k_points[i].type(torch.DoubleTensor)
+        tmp_data = torch.where(cmp_labels == i, avg, 0.)
         result_list.append(tmp_data)
     result = torch.zeros_like(data)
     for i in result_list:
@@ -68,14 +61,16 @@ def get_k_means(img, k):
     cul = tensor_cv.shape[0]
     row = tensor_cv.shape[1]
     data = tensor_cv.reshape(cul * row, 3)
+
     result = k_means(data, k)
+
     if(type(result) == int and result == -1):
         return
     result = result.reshape(cul, row, 3)
     result_img_cv = result.numpy().astype(np.uint8)
-    cv2.imwrite('result.png', result_img_cv)
+    cv2.imwrite('result.png', cv2.cvtColor(result_img_cv, cv2.COLOR_RGB2BGR))
     used_time = time.time() - start
-
+    
     plt.figure('result')
     plt.subplot(1, 2, 1)
     plt.imshow(img_cv)
@@ -88,8 +83,6 @@ def get_k_means(img, k):
     plt.title('result with k = {} in time {:.3f}s'.format(k, used_time))
     plt.xticks([])
     plt.yticks([])
-    plt.ion()
-    # plt.show()
     plt.savefig('result_cmp.png')
     img = cv2.imread('result_cmp.png')
     cv2.imshow("result", img)
