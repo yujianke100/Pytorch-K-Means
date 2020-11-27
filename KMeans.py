@@ -43,7 +43,7 @@ def k_means(data, k, max_time=100):
     cmp_labels = label.expand(3, label.shape[0]).transpose(0, 1)
     result_list = []
     for i in range(k):
-        avg = k_points[i].type(torch.DoubleTensor)
+        avg = k_points[i]
         tmp_data = torch.where(cmp_labels == i, avg, 0.)
         result_list.append(tmp_data)
     result = torch.zeros_like(data)
@@ -52,24 +52,9 @@ def k_means(data, k, max_time=100):
     window.close()
     return result
 
-
-def get_k_means(img, k):
-    start = time.time()
-    img_cv = cv2.imread(img)
-    img_cv = cv2.cvtColor(img_cv, cv2.COLOR_BGR2RGB)
-    tensor_cv = torch.from_numpy(img_cv).type(torch.FloatTensor)
-    cul = tensor_cv.shape[0]
-    row = tensor_cv.shape[1]
-    data = tensor_cv.reshape(cul * row, 3)
-
-    result = k_means(data, k)
-
-    if(type(result) == int and result == -1):
-        return
-    result = result.reshape(cul, row, 3)
+def show(result, img_cv, k, used_time):
     result_img_cv = result.numpy().astype(np.uint8)
     cv2.imwrite('./result/result_with_k{}.png'.format(k), cv2.cvtColor(result_img_cv, cv2.COLOR_RGB2BGR))
-    used_time = time.time() - start
     
     plt.figure('result')
     plt.subplot(1, 2, 1)
@@ -88,4 +73,21 @@ def get_k_means(img, k):
     cv2.imshow("result", img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-    return
+
+def get_k_means(img, k):
+    start = time.time()
+    img_cv = cv2.imread(img)
+    img_cv = cv2.cvtColor(img_cv, cv2.COLOR_BGR2RGB)
+    tensor_cv = torch.from_numpy(img_cv).type(torch.DoubleTensor)
+    cul = tensor_cv.shape[0]
+    row = tensor_cv.shape[1]
+    data = tensor_cv.reshape(cul * row, 3)
+
+    result = k_means(data, k)
+
+    if(type(result) == int and result == -1):
+        return
+    result = result.reshape(cul, row, 3)
+    used_time = time.time() - start
+
+    show(result, img_cv, k, used_time)
