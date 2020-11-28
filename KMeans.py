@@ -12,15 +12,15 @@ def k_means(data, k, max_time=100):
     k_points = data[init]
     last_label = line_len = 0
     for time in range(max_time):
-        matrx = data.unsqueeze(0).repeat(k, 1, 1)
-        k_points_matrx = k_points.unsqueeze(1).repeat(1, size, 1)
+        matrx = data.expand(k, data.shape[0], data.shape[1])
+        k_points_matrx = k_points.unsqueeze(1)
         distances = abs(matrx - k_points_matrx).mean(dim=2)
         label = distances.argmin(dim=0)
         difference = (label != last_label).sum()
         if(time == 0):
             line_len = difference
             layout = [[sg.Text('running...')],
-                      [sg.ProgressBar(float(line_len), orientation='h', size=(
+                      [sg.ProgressBar(float(line_len * 0.05), orientation='h', size=(
                           20, 20), key='progressbar')],
                       [sg.Cancel()]]
             window = sg.Window('please be waitting!', layout)
@@ -29,7 +29,7 @@ def k_means(data, k, max_time=100):
         if event == 'Cancel' or event == sg.WIN_CLOSED:
             window.close()
             return -1
-        progress_bar.UpdateBar(float(line_len - difference))
+        progress_bar.UpdateBar(max(float(line_len * 0.05 - difference), 0.))
         if(difference == 0):
             break
         last_label = label
@@ -50,10 +50,10 @@ def k_means(data, k, max_time=100):
     for i in result_list:
         result += i
     window.close()
-    return result
+    return result, time
 
 
-def show(result, img_cv, k, used_time):
+def show(result, img_cv, k, used_time, loop_time):
     result_img_cv = result.numpy().astype(np.uint8)
     cv2.imwrite('./result/result_with_k{}.png'.format(k),
                 cv2.cvtColor(result_img_cv, cv2.COLOR_RGB2BGR))
@@ -67,7 +67,8 @@ def show(result, img_cv, k, used_time):
 
     plt.subplot(1, 2, 2)
     plt.imshow(result_img_cv)
-    plt.title('result with k = {} in time {:.3f}s'.format(k, used_time))
+    plt.title('result k={} in {:.3f}s with {} loop'.format(
+        k, used_time, loop_time))
     plt.xticks([])
     plt.yticks([])
     plt.savefig('./result/result_cmp.png')
@@ -86,11 +87,11 @@ def get_k_means(img, k):
     row = tensor_cv.shape[1]
     data = tensor_cv.reshape(cul * row, 3)
 
-    result = k_means(data, k)
+    result, loop_time = k_means(data, k)
 
     if(type(result) == int and result == -1):
         return
     result = result.reshape(cul, row, 3)
     used_time = time.time() - start
 
-    show(result, img_cv, k, used_time)
+    show(result, img_cv, k, used_time, loop_time)
