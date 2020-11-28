@@ -5,22 +5,25 @@ import time
 import PySimpleGUI as sg
 from matplotlib import pyplot as plt
 
+BAR_LEN = 0.05
+loop_time = 0
 
-def k_means(data, k, max_time=100):
-    size, rgb = data.shape
-    init = torch.randint(size, (k,))
+
+def k_means(data, k, max_time=1000):
+    data_size, rgb = data.shape
+    init = torch.randint(data_size, (k,))
     k_points = data[init]
     last_label = line_len = 0
-    for time in range(max_time):
-        matrx = data.expand(k, data.shape[0], data.shape[1])
+    for loop_time in range(max_time):
+        matrx = data.expand(k, data_size, rgb)
         k_points_matrx = k_points.unsqueeze(1)
-        distances = abs(matrx - k_points_matrx).mean(dim=2)
-        label = distances.argmin(dim=0)
+        distances = abs(matrx - k_points_matrx).sum(2)
+        label = distances.argmin(0)
         difference = (label != last_label).sum()
-        if(time == 0):
-            line_len = difference
+        if(loop_time == 0):
+            line_len = float(difference * BAR_LEN)
             layout = [[sg.Text('running...')],
-                      [sg.ProgressBar(float(line_len * 0.05), orientation='h', size=(
+                      [sg.ProgressBar(line_len, orientation='h', size=(
                           20, 20), key='progressbar')],
                       [sg.Cancel()]]
             window = sg.Window('please be waitting!', layout)
@@ -28,8 +31,8 @@ def k_means(data, k, max_time=100):
         event, values = window.read(timeout=10)
         if event == 'Cancel' or event == sg.WIN_CLOSED:
             window.close()
-            return -1
-        progress_bar.UpdateBar(max(float(line_len * 0.05 - difference), 0.))
+            return
+        progress_bar.UpdateBar(max(line_len - float(difference), 0.))
         if(difference == 0):
             break
         last_label = label
@@ -40,17 +43,12 @@ def k_means(data, k, max_time=100):
             else:
                 k_points = torch.cat(
                     [k_points, k_point.mean(0).unsqueeze(0)], 0)
-    cmp_labels = label.expand(3, label.shape[0]).transpose(0, 1)
-    result_list = []
-    for i in range(k):
-        avg = k_points[i]
-        tmp_data = torch.where(cmp_labels == i, avg, 0.)
-        result_list.append(tmp_data)
+    cmp_labels = label.expand(rgb, data_size).transpose(0, 1)
     result = torch.zeros_like(data)
-    for i in result_list:
-        result += i
+    for i in range(k):
+        result += torch.where(cmp_labels == i, k_points[i], 0.)
     window.close()
-    return result, time
+    return result
 
 
 def show(result, img_cv, k, used_time, loop_time):
@@ -87,9 +85,9 @@ def get_k_means(img, k):
     row = tensor_cv.shape[1]
     data = tensor_cv.reshape(cul * row, 3)
 
-    result, loop_time = k_means(data, k)
+    result = k_means(data, k)
 
-    if(type(result) == int and result == -1):
+    if(result == None):
         return
     result = result.reshape(cul, row, 3)
     used_time = time.time() - start
