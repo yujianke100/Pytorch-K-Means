@@ -5,7 +5,7 @@
 torch，numpy，cv2，matplotlib，PySimpleGUI，easygui
 
 ## 使用
-python main.py即可
+python main.py即可，结果和比较图会存在result文件夹中
 
 ## 目标
 利用 K means，让图片中颜色相近的点变成相同的颜色，而最终的颜色就由这些点求均值得到
