@@ -1,5 +1,5 @@
 # Pytorch-K-Means
-### Homework : Using K-Means to handel pictures with GUI
+### Homework : Using K-Means to handle pictures with GUI
 
 ## 环境
 torch，numpy，cv2，matplotlib，PySimpleGUI，easygui
