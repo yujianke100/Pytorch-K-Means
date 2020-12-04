@@ -5,12 +5,15 @@
 torch，numpy，cv2，matplotlib，PySimpleGUI，easygui
 
 ## 使用
-python main.py即可，结果和比较图会存在result文件夹中
+python kmeans.py或 python kmeans_img.py即可，后者结果和比较图会存在result文件夹中
 
 ## 目标
-利用 K means，让图片中颜色相近的点变成相同的颜色，而最终的颜色就由这些点求均值得到
+1.利用 K means， 将随机生成的点按距离进行分类
+2.利用 K means，图片中颜色相近的点变成相同的颜色，而最终的颜色就由这些点求均值得到
 
 ## 基本思想
+### 以下都为img的实现思想，随机点的思路相同,不多赘述。
+
 1.读取图片，不论RGB，像素点本身二维压成一维
 
 2.随机选取K个中心点，分别对应K类
