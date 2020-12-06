@@ -53,7 +53,7 @@ python kmeans.py或 python kmeans_img.py即可，后者结果和比较图会存�
 easygui调用路径选择框偶尔会造成explorer未响应
 
 ## 为什么在展示时不直接plt.show()
-找不到不影响show的同时还能在关闭窗口后继续运行的方法
+找不到不影响show的同时还能在关闭窗口后继续运行的方法。应该是和GUI的库有什么冲突，因为打点的demo可以这么干。不多折腾了就这样吧。
 
 ## 为什么有俩GUI的库
 懒
