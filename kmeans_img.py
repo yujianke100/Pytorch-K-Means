@@ -14,7 +14,8 @@ BAR_LEN = 0.05
 loop_time = 0
 
 
-def k_means(data, k, max_time=1000):
+def k_means(data, k, max_time=100):
+    global loop_time
     data_size, rgb = data.shape
     init = torch.randint(data_size, (k,))
     k_points = data[init]
@@ -56,7 +57,8 @@ def k_means(data, k, max_time=1000):
     return result
 
 
-def show(result, img_cv, k, used_time, loop_time):
+def show(result, img_cv, k, used_time):
+    global loop_time
     result_img_cv = result.numpy().astype(np.uint8)
     cv2.imwrite('./result/result_with_k{}.png'.format(k),
                 cv2.cvtColor(result_img_cv, cv2.COLOR_RGB2BGR))
@@ -97,7 +99,7 @@ def get_k_means(img, k):
     result = result.reshape(cul, row, 3)
     used_time = time.time() - start
 
-    show(result, img_cv, k, used_time, loop_time)
+    show(result, img_cv, k, used_time)
 
 
 def uiShow():
