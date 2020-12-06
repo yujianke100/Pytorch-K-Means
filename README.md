@@ -43,7 +43,7 @@ python kmeans.py或 python kmeans_img.py即可，后者结果和比较图会存�
 
 6.既然where没法1取3，那就把label扩充三份转置一下再取
 
-7.统计循环次数的变量别忘了global，呵呵
+7.偷懒，统计循环次数的变量直接global，呵呵
 
 ## 可能是BUG
 easygui调用路径选择框偶尔会造成explorer未响应
