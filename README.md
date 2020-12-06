@@ -6,7 +6,7 @@ torch，numpy，cv2，matplotlib，PySimpleGUI，easygui
 
 可直接pip install -r requirements.txt安装。
 
-[Pytorch官网安装]<https://pytorch.org/get-started/locally/>
+[Pytorch官网安装](https://pytorch.org/get-started/locally/)
 
 ## 使用
 python kmeans.py或 python kmeans_img.py即可，后者结果和比较图会存在result文件夹中
