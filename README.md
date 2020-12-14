@@ -1,7 +1,7 @@
 # Pytorch-K-Means
 ### Homework : Using K-Means to handle pictures with GUI
 
-## UPDATE 12.14.2020
+### UPDATE 12.14.2020
 自己笔记本是低压5代i5，跑pytorch太慢，一怒之下用numpy重写了一份
 
 经测试，在标压10代i5上好像没啥区别，不知道笔记本哪里短板了
