@@ -1,19 +1,20 @@
-import numpy as np
+import torch
 import time
 from matplotlib import pyplot as plt
 
 BAR_LEN = 0.05
 loop_time = 0
 
+
 def k_means(data, k, max_time=100):
     global loop_time
     data_size, rgb = data.shape
-    init = np.random.randint(0, data_size, k)
+    init = torch.randint(data_size, (k,))
     k_points = data[init]
     last_labels = 0
     for loop_time in range(max_time):
-        matrx = np.expand_dims(data, 0).repeat(k, 0)
-        k_points_matrx = np.expand_dims(k_points, 1).repeat(data_size, 1)
+        matrx = data.expand(k, data_size, rgb)
+        k_points_matrx = k_points.unsqueeze(1)
         distances = abs(matrx - k_points_matrx).sum(2)
         labels = distances.argmin(0)
         if((labels == last_labels).all()):
@@ -22,12 +23,11 @@ def k_means(data, k, max_time=100):
         for i in range(k):
             k_point = data[labels == i]
             if(i == 0):
-                k_points = np.expand_dims(k_point.mean(0), 0)
+                k_points = k_point.mean(0).unsqueeze(0)
             else:
-                k_points = np.concatenate(
-                    [k_points, np.expand_dims(k_point.mean(0), 0)], 0)
-        k_points.reshape(k, rgb)
-    return last_labels.astype(np.float64)
+                k_points = torch.cat(
+                    [k_points, k_point.mean(0).unsqueeze(0)], 0)
+    return last_labels
 
 
 def get_k_means(k):
@@ -35,13 +35,14 @@ def get_k_means(k):
     start = time.time()
     color_box = ['y', 'm', 'c', 'r', 'g', 'b', 'w', 'k']
     for i in range(k):
-        tmp_data = np.random.randn(100, 2) + i
+        tmp_data = torch.randn(100, 2) + i
         if(i == 0):
             data = tmp_data
         else:
-            data = np.concatenate([data, tmp_data], 0)
-    data.reshape(k, 100, 2)
-    color = k_means(data, k).tolist()
+            data = torch.cat((data, tmp_data), 0)
+    t = k_means(data, k).float().unsqueeze(1)
+    data = data.numpy()
+    color = list(t.numpy())
     color = [(lambda x: color_box[int(x)])(i) for i in color]
     plt.figure('result')
     plt.scatter(data[:, 0], data[:, 1], color=color)
