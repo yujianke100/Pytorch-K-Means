@@ -4,6 +4,8 @@
 ## UPDATE 12.14.2020
 自己笔记本是低压5代i5，跑pytorch太慢，一怒之下用numpy重写了一份
 
+经测试，在标压10代i5上好像没啥区别，瓶颈可能是在IO上
+
 ## 环境
 torch（*with_pytorch需要*），numpy，cv2，matplotlib，PySimpleGUI，easygui
 
