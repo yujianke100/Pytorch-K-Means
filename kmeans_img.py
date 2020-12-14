@@ -85,7 +85,7 @@ def show(result, img_cv, k, used_time):
 
 def get_k_means(img, k):
     start = time.time()
-    img_cv = cv2.imread(img)
+    img_cv = cv2.imdecode(np.fromfile(img, dtype=np.uint8), -1)
     img_cv = cv2.cvtColor(img_cv, cv2.COLOR_BGR2RGB)
     tensor_cv = torch.from_numpy(img_cv).type(torch.DoubleTensor)
     cul = tensor_cv.shape[0]
@@ -110,6 +110,7 @@ def uiShow():
         if(choise == False):
             break
         img_path = t.fileopenbox()
+        print(img_path)
         if(img_path == None):
             t.msgbox('请选择图片！', 'error!', '重试')
             continue
