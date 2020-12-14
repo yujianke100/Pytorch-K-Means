@@ -49,6 +49,8 @@ python kmeans.py或 python kmeans_img.py即可，后者结果和比较图会存�
 
 7.偷懒，统计循环次数的变量直接global，呵呵
 
+8.直接imread没法读中文路径，改用imdecode
+
 ## 可能是BUG
 easygui调用路径选择框偶尔会造成explorer未响应
 
