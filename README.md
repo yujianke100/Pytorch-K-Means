@@ -1,11 +1,11 @@
 # Pytorch-K-Means
 ### Homework : Using K-Means to handle pictures with GUI
 
-##UPDATE 12.14.2020
-自己笔记本是低压5代i5，跑pytorch太慢，一怒之下改用numpy
+## UPDATE 12.14.2020
+自己笔记本是低压5代i5，跑pytorch太慢，一怒之下用numpy重写了一份
 
 ## 环境
-torch（*with_pytorch需要），numpy，cv2，matplotlib，PySimpleGUI，easygui
+torch（*with_pytorch需要*），numpy，cv2，matplotlib，PySimpleGUI，easygui
 
 pytorch以外的库，可直接pip install -r requirements.txt安装。
 
@@ -43,7 +43,7 @@ python {name}.py即可，后者结果和比较图会存在result文件夹中
 
 2.由于不需要更改原矩阵的数值，与中心点做差的矩阵用expand扩充得到就行(numpy只能expand_dims配合repeat)
 
-3.利用tensor的性质，不需要对中心点的矩阵做扩充。适当位置加个维度就行（pytorch）
+3.利用tensor的性质，不需要对中心点的矩阵做扩充。适当位置加个维度就行（pytorch版本）
 
 4.距离没有用正常的欧氏距离，直接做差绝对值求和以减少计算量（其实没啥区别）
 
