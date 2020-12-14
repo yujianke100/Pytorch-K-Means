@@ -4,7 +4,7 @@
 ## 环境
 torch，numpy，cv2，matplotlib，PySimpleGUI，easygui
 
-可直接pip install -r requirements.txt安装。
+pytorch以外的库，可直接pip install -r requirements.txt安装。
 
 [Pytorch官网安装](https://pytorch.org/get-started/locally/)
 
