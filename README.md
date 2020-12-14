@@ -13,6 +13,7 @@ python kmeans.py或 python kmeans_img.py即可，后者结果和比较图会存�
 
 ## 目标
 1.利用 K means， 将随机生成的点按距离进行分类
+
 2.利用 K means，图片中颜色相近的点变成相同的颜色，而最终的颜色就由这些点求均值得到
 
 ## 基本思想
