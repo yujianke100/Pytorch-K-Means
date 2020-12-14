@@ -12,6 +12,7 @@ MIN_K = 2
 
 BAR_LEN = 0.05
 loop_time = 0
+ZEROS = torch.zeros(3).type(torch.DoubleTensor)
 
 
 def k_means(data, k, max_time=100):
@@ -52,7 +53,7 @@ def k_means(data, k, max_time=100):
     cmp_labels = labels.expand(rgb, data_size).transpose(0, 1)
     result = torch.zeros_like(data)
     for i in range(k):
-        result += torch.where(cmp_labels == i, k_points[i], 0.)
+        result += torch.where(cmp_labels == i, k_points[i], ZEROS)
     window.close()
     return result
 
@@ -110,7 +111,6 @@ def uiShow():
         if(choise == False):
             break
         img_path = t.fileopenbox()
-        print(img_path)
         if(img_path == None):
             t.msgbox('请选择图片！', 'error!', '重试')
             continue
