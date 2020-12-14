@@ -51,6 +51,7 @@ def get_k_means(k):
         k, used_time, loop_time))
     plt.show()
 
+
 if __name__ == '__main__':
     print('k means 分类随机点')
     while(1):

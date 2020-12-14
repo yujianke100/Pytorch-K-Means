@@ -16,8 +16,7 @@ loop_time = 0
 def k_means(data, k, max_time=100):
     global loop_time
     data_size, rgb = data.shape
-    init = np.random.randint(0, data_size, k)
-    k_points = data[init]
+    k_points = data[np.random.randint(0, data_size, k)]
     last_labels = line_len = 0
     for loop_time in range(max_time):
         matrx = np.expand_dims(data, 0).repeat(k, 0)
@@ -48,8 +47,7 @@ def k_means(data, k, max_time=100):
             else:
                 k_points = np.concatenate(
                     [k_points, np.expand_dims(k_point.mean(0), 0)], 0)
-        k_points.reshape(k, rgb)
-    cmp_labels = np.expand_dims(labels,0).repeat(rgb, 0).transpose(1, 0)
+    cmp_labels = np.expand_dims(labels, 0).repeat(rgb, 0).transpose(1, 0)
     result = np.zeros_like(data).astype(np.float64)
     for i in range(k):
         result += np.where(cmp_labels == i, k_points[i], 0)

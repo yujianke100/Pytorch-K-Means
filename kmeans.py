@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 BAR_LEN = 0.05
 loop_time = 0
 
+
 def k_means(data, k, max_time=100):
     global loop_time
     data_size, rgb = data.shape
@@ -26,7 +27,6 @@ def k_means(data, k, max_time=100):
             else:
                 k_points = np.concatenate(
                     [k_points, np.expand_dims(k_point.mean(0), 0)], 0)
-        k_points.reshape(k, rgb)
     return last_labels.astype(np.float64)
 
 
@@ -49,6 +49,7 @@ def get_k_means(k):
     plt.title('result k={} in {:.3f}s with {} loop'.format(
         k, used_time, loop_time))
     plt.show()
+
 
 if __name__ == '__main__':
     print('k means 分类随机点')
