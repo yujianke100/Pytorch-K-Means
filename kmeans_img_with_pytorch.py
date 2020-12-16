@@ -21,6 +21,8 @@ def k_means(data, k, max_time=100):
     init = torch.randint(data_size, (k,))
     k_points = data[init]
     last_labels = line_len = 0
+    
+    ##UI CODE
     for loop_time in range(max_time):
         matrx = data.expand(k, data_size, rgb)
         k_points_matrx = k_points.unsqueeze(1)
@@ -40,6 +42,8 @@ def k_means(data, k, max_time=100):
             window.close()
             return
         progress_bar.UpdateBar(max(line_len - float(difference), 0.))
+    ##UI CODE
+        
         if(difference == 0):
             break
         last_labels = labels
@@ -54,7 +58,11 @@ def k_means(data, k, max_time=100):
     result = torch.zeros_like(data)
     for i in range(k):
         result += torch.where(cmp_labels == i, k_points[i], ZEROS)
+        
+    ##UI CODE
     window.close()
+    ##UI CODE
+    
     return result
 
 
