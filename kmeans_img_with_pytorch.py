@@ -18,8 +18,7 @@ ZEROS = torch.zeros(3).type(torch.DoubleTensor)
 def k_means(data, k, max_time=100):
     global loop_time
     data_size, rgb = data.shape
-    init = torch.randint(data_size, (k,))
-    k_points = data[init]
+    k_points = data[torch.randint(data_size, (k,))]
     last_labels = line_len = 0
     for loop_time in range(max_time):
         matrx = data.expand(k, data_size, rgb)
