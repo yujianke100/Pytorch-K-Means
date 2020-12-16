@@ -24,6 +24,8 @@ def k_means(data, k, max_time=100):
         distances = abs(matrx - k_points_matrx).sum(2)
         labels = distances.argmin(0)
         difference = (labels != last_labels).sum()
+        
+        ##UI CODE
         if(loop_time == 0):
             line_len = float(difference * BAR_LEN)
             layout = [[sg.Text('running...')],
@@ -37,6 +39,8 @@ def k_means(data, k, max_time=100):
             window.close()
             return
         progress_bar.UpdateBar(max(line_len - float(difference), 0.))
+        ##UI CODE
+        
         if(difference == 0):
             break
         last_labels = labels
@@ -51,7 +55,11 @@ def k_means(data, k, max_time=100):
     result = np.zeros_like(data).astype(np.float64)
     for i in range(k):
         result += np.where(cmp_labels == i, k_points[i], 0)
+        
+    ##UI CODE
     window.close()
+    ##UI CODE
+    
     return result
 
 
