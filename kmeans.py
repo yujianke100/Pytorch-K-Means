@@ -9,8 +9,7 @@ loop_time = 0
 def k_means(data, k, max_time=100):
     global loop_time
     data_size, rgb = data.shape
-    init = np.random.randint(0, data_size, k)
-    k_points = data[init]
+    k_points = data[np.random.randint(0, data_size, k)]
     last_labels = 0
     for loop_time in range(max_time):
         matrx = np.expand_dims(data, 0).repeat(k, 0)
