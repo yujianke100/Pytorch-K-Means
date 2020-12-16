@@ -21,14 +21,14 @@ def k_means(data, k, max_time=100):
     init = torch.randint(data_size, (k,))
     k_points = data[init]
     last_labels = line_len = 0
-    
-    ##UI CODE
     for loop_time in range(max_time):
         matrx = data.expand(k, data_size, rgb)
         k_points_matrx = k_points.unsqueeze(1)
         distances = abs(matrx - k_points_matrx).sum(2)
         labels = distances.argmin(0)
         difference = (labels != last_labels).sum()
+        
+        ##UI CODE
         if(loop_time == 0):
             line_len = float(difference * BAR_LEN)
             layout = [[sg.Text('running...')],
@@ -42,7 +42,7 @@ def k_means(data, k, max_time=100):
             window.close()
             return
         progress_bar.UpdateBar(max(line_len - float(difference), 0.))
-    ##UI CODE
+        ##UI CODE
         
         if(difference == 0):
             break
