@@ -3,7 +3,7 @@
 
 ## [github地址](https://github.com/yujianke100/Pytorch-K-Means)
 
-### UPDATE 12.28
+### UPDATE 12.28.2020
 追加俩show_each_step动态显示过程。
 
 ### UPDATE 12.14.2020
