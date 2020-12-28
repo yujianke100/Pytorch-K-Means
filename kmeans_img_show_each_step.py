@@ -1,28 +1,24 @@
 # -*- coding:utf-8 -*-
-import torch
 import cv2
 import numpy as np
-import time
 import PySimpleGUI as sg
 import easygui as t
-from matplotlib import pyplot as plt
 
 MAX_K = 20
 MIN_K = 2
 
 BAR_LEN = 0.05
 loop_time = 0
-ZEROS = torch.zeros(3).type(torch.DoubleTensor)
 
 
-def k_means(data, k, max_time=100):
+def k_means(data, k, col, row, max_time=100):
     global loop_time
     data_size, rgb = data.shape
-    k_points = data[torch.randint(data_size, (k,))]
+    k_points = data[np.random.randint(0, data_size, k)]
     last_labels = line_len = 0
     for loop_time in range(max_time):
-        matrx = data.expand(k, data_size, rgb)
-        k_points_matrx = k_points.unsqueeze(1)
+        matrx = np.expand_dims(data, 0).repeat(k, 0)
+        k_points_matrx = np.expand_dims(k_points, 1).repeat(data_size, 1)
         distances = abs(matrx - k_points_matrx).sum(2)
         labels = distances.argmin(0)
         difference = (labels != last_labels).sum()
@@ -44,20 +40,26 @@ def k_means(data, k, max_time=100):
         ##UI CODE
         
         if(difference == 0):
+            window.close()
+            cv2.waitKey(0)
             break
         last_labels = labels
         for i in range(k):
             k_point = data[labels == i]
             if(i == 0):
-                k_points = k_point.mean(0).unsqueeze(0)
+                k_points = np.expand_dims(k_point.mean(0), 0)
             else:
-                k_points = torch.cat(
-                    [k_points, k_point.mean(0).unsqueeze(0)], 0)
-    cmp_labels = labels.expand(rgb, data_size).transpose(0, 1)
-    result = torch.zeros_like(data)
-    for i in range(k):
-        result += torch.where(cmp_labels == i, k_points[i], ZEROS)
-        
+                k_points = np.concatenate(
+                    [k_points, np.expand_dims(k_point.mean(0), 0)], 0)
+
+        cmp_labels = np.expand_dims(labels, 0).repeat(rgb, 0).transpose(1, 0)
+        result = np.zeros_like(data).astype(np.float64)
+        for i in range(k):
+            result += np.where(cmp_labels == i, k_points[i], 0)
+        result_img_cv = result.reshape(col, row, 3).astype(np.uint8)
+        cv2.imshow('result in loop', result_img_cv)
+        cv2.waitKey(1)
+    
     ##UI CODE
     window.close()
     ##UI CODE
@@ -65,49 +67,14 @@ def k_means(data, k, max_time=100):
     return result
 
 
-def show(result, img_cv, k, used_time):
-    global loop_time
-    result_img_cv = result.numpy().astype(np.uint8)
-    cv2.imwrite('./result/result_with_k{}.png'.format(k),
-                cv2.cvtColor(result_img_cv, cv2.COLOR_RGB2BGR))
-
-    plt.figure('result')
-    plt.subplot(1, 2, 1)
-    plt.imshow(img_cv)
-    plt.title('original')
-    plt.xticks([])
-    plt.yticks([])
-
-    plt.subplot(1, 2, 2)
-    plt.imshow(result_img_cv)
-    plt.title('result k={} in {:.3f}s with {} loop'.format(
-        k, used_time, loop_time))
-    plt.xticks([])
-    plt.yticks([])
-    plt.savefig('./result/result_cmp.png')
-    img = cv2.imread('./result/result_cmp.png')
-    cv2.imshow("result", img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
 
 def get_k_means(img, k):
-    start = time.time()
     img_cv = cv2.imdecode(np.fromfile(img, dtype=np.uint8), -1)
-    img_cv = cv2.cvtColor(img_cv, cv2.COLOR_BGR2RGB)
-    tensor_cv = torch.from_numpy(img_cv).type(torch.DoubleTensor)
-    col = tensor_cv.shape[0]
-    row = tensor_cv.shape[1]
-    data = tensor_cv.reshape(col * row, 3)
+    col = img_cv.shape[0]
+    row = img_cv.shape[1]
+    data = img_cv.reshape(col * row, 3)
 
-    result = k_means(data, k)
-
-    if(result == None):
-        return
-    result = result.reshape(col, row, 3)
-    used_time = time.time() - start
-
-    show(result, img_cv, k, used_time)
+    k_means(data, k, col, row)
 
 
 def uiShow():

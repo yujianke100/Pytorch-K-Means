@@ -93,15 +93,15 @@ def get_k_means(img, k):
     start = time.time()
     img_cv = cv2.imdecode(np.fromfile(img, dtype=np.uint8), -1)
     img_cv = cv2.cvtColor(img_cv, cv2.COLOR_BGR2RGB)
-    cul = img_cv.shape[0]
+    col = img_cv.shape[0]
     row = img_cv.shape[1]
-    data = img_cv.reshape(cul * row, 3)
+    data = img_cv.reshape(col * row, 3)
 
     result = k_means(data, k)
 
     if(result.all() == None):
         return
-    result = result.reshape(cul, row, 3)
+    result = result.reshape(col, row, 3)
     used_time = time.time() - start
 
     show(result, img_cv, k, used_time)
