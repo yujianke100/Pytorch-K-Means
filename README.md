@@ -3,6 +3,9 @@
 
 ## [github地址](https://github.com/yujianke100/Pytorch-K-Means)
 
+### UPDATE 12.28
+追加俩show_each_step动态显示过程。
+
 ### UPDATE 12.14.2020
 自己笔记本是低压5代i5，跑pytorch太慢，一怒之下用numpy重写了一份
 
