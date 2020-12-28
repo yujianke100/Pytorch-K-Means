@@ -1,7 +1,7 @@
 # Pytorch-K-Means
 ### Homework : Using K-Means to handle pictures with GUI
 
-## [github url](https://github.com/yujianke100/Pytorch-K-Means)
+## [github地址](https://github.com/yujianke100/Pytorch-K-Means)
 
 ### UPDATE 12.14.2020
 自己笔记本是低压5代i5，跑pytorch太慢，一怒之下用numpy重写了一份
